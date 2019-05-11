@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateOrderStatusTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Update custom order status via the Admin"/>
+            <title value="Admin should be able to update custom order status"/>
+            <description value="Admin should be able to update custom order status"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="defaultOrderStatus" stepKey="createOrderStatus"/>
+        </before>
+        <after>
+            <!--<deleteData createDataKey="createOrderStatus" stepKey="deleteOrderStatus"/>-->
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <amOnPage url="{{AdminOrderStatusesPage.url}}" stepKey="navigateToOrderStatusesPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Order Status" stepKey="seeIndexPageTitle"/>
+
+
+        <actionGroup ref="AdminLegacyGridFilterResetActionGroup" stepKey="clearGridFilters"/>
+        <actionGroup ref="AdminLegacyGridFilterFillInputFieldActionGroup" stepKey="filterGridByFirstCmsPageIdentifier">
+            <argument name="filterInputName" value="status" />
+            <argument name="filterValue" value="$$createOrderStatus.status$$" />
+        </actionGroup>
+        <actionGroup ref="AdminLegacyGridFilterApplyActionGroup" stepKey="applyFirstGridFilters"/>
+
+        <click selector="{{AdminOrderStatusesGridSection.firstRow}}" stepKey="clickEditOrderStatus"/>
+
+
+        <fillField selector="{{AdminOrderStatusFormSection.label}}" userInput="Suspected Fraud" stepKey="changeStatusLabel"/>
+        <click selector="{{AdminOrderStatusFormActionSection.save}}" stepKey="saveOrderStatus"/>
+        <waitForElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="waitSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You saved the order status." stepKey="seeSuccessMessage" after="saveOrderStatus"/>
+    </test>
+</tests>

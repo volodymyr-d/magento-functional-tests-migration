@@ -8,7 +8,7 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="defaultOrderStatus">
+    <entity name="defaultOrderStatus" type="orderStatus">
         <data key="status" unique="suffix">order_status</data>
         <data key="label" unique="suffix">orderLabel</data>
     </entity>
